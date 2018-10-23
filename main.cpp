@@ -31,15 +31,20 @@ int main(int argc, char* argv[])
 {
   try
   {
-    hw7::BulkReader reader{parseArg(argc, argv)};
+    hw10::BulkReader reader{parseArg(argc, argv)};
 
-    auto processor = std::make_shared<hw7::BulkProcessor>();
-    auto logger = std::make_shared<hw7::BulkLogger>();
+    auto processor = std::make_shared<hw10::BulkProcessor>();
+    auto logger = std::make_shared<hw10::BulkLogger>();
 
     reader.subscribe(processor);
     reader.subscribe(logger);
 
     reader.read();
+
+    std::cout << reader.stats() << reader.lineCount() << " lines" << std::endl;
+    std::cout << processor->stats();
+    std::cout << logger->file1Stats();
+    std::cout << logger->file2Stats();
   }
   catch(const std::exception& e)
   {
