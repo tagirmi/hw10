@@ -14,11 +14,21 @@ std::string getBulkLogName(const hw7::BulkTime& time)
 
 }
 
-void hw7::BulkLogger::update(const BulkTime& time, const Bulk& bulk)
+void hw10::BulkLogger::update(const hw7::BulkTime& time, const hw7::Bulk& bulk)
 {
   std::ofstream fs{getBulkLogName(time)};
 
   fs << bulk;
 
   fs.close();
+}
+
+hw10::BulkStats hw10::BulkLogger::file1Stats() const
+{
+  return m_stats1;
+}
+
+hw10::BulkStats hw10::BulkLogger::file2Stats() const
+{
+  return m_stats2;
 }
