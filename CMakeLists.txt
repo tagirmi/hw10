@@ -8,7 +8,8 @@ endif()
 
 project(bulkmt VERSION 0.0.${BUILD})
 
-add_executable(${PROJECT_NAME} main.cpp bulk_reader.cpp bulk_processor.cpp bulk_logger.cpp bulk_collector.cpp bulk_stats.cpp)
+add_executable(${PROJECT_NAME} main.cpp bulk_reader.cpp bulk_processor.cpp bulk_logger.cpp
+  bulk_collector.cpp bulk_concurrent.cpp bulk_stats.cpp)
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 
