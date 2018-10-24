@@ -1,28 +1,17 @@
 #pragma once
 
-#include <future>
-#include <thread>
-
-#include "bulk.h"
-#include "bulk_stats.h"
+#include "bulk_concurrent.h"
 
 namespace hw10 {
 
-class BulkProcessor : public hw7::BulkObserver
+class BulkProcessor final : public BulkConcurrentObserver
 {
 public:
-  BulkProcessor();
-  ~BulkProcessor();
-
-  void update(const hw7::BulkTime&, const hw7::Bulk&) override;
-
-  BulkStats stats() const;
+  BulkProcessor() = default;
+  ~BulkProcessor() = default;
 
 private:
-  std::promise<hw7::Bulk> m_promise;
-  std::future<hw7::Bulk> m_future;
-  std::thread m_thread;
-  BulkStats m_stats{"log"};
+  void handle(const hw7::BulkTime&, const hw7::Bulk&) override;
 };
 
 } // hw7

@@ -1,21 +1,13 @@
 #pragma once
 
-#include "bulk.h"
-#include "bulk_stats.h"
+#include "bulk_concurrent.h"
 
 namespace hw10 {
 
-class BulkLogger : public hw7::BulkObserver
+class BulkLogger final : public BulkConcurrentObserver
 {
-public:
-  void update(const hw7::BulkTime&, const hw7::Bulk&) override;
-
-  BulkStats file1Stats() const;
-  BulkStats file2Stats() const;
-
 private:
-  BulkStats m_stats1{"file1"};
-  BulkStats m_stats2{"file2"};
+  void handle(const hw7::BulkTime&, const hw7::Bulk&) override;
 };
 
 } // hw10
