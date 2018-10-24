@@ -41,10 +41,11 @@ int main(int argc, char* argv[])
 
     reader.read();
 
-//    std::cout << reader.stats() << reader.lineCount() << " lines" << std::endl;
-//    std::cout << processor->stats();
-//    std::cout << logger->file1Stats();
-//    std::cout << logger->file2Stats();
+    std::cout << reader.stats() << reader.lineCount() << " lines" << std::endl;
+    for (const auto& s : processor->stats())
+      std::cout << s;
+    for (const auto& s : logger->stats())
+      std::cout << s;
   }
   catch(const std::exception& e)
   {

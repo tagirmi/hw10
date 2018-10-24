@@ -7,6 +7,7 @@
 
 hw10::BulkReader::BulkReader(size_t bulkSize)
   : m_observers{}
+  , m_lineCount{}
   , m_stats{"main"}
 {
   using namespace std::placeholders;
