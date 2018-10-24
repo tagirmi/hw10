@@ -4,7 +4,7 @@
 
 namespace hw10 {
 
-class BulkProcessor final : public BulkConcurrentObserver
+class BulkProcessor final : public BulkConcurrentObserver<1>
 {
 public:
   BulkProcessor() = default;
