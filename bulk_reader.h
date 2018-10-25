@@ -31,7 +31,6 @@ public:
 
 private:
   void notify(const hw7::BulkTime&, const hw7::Bulk&);
-  void stop();
 
   std::list<std::weak_ptr<hw7::BulkObserver>> m_observers;
   std::unique_ptr<hw7::details::BulkCollector> m_bulkCollector;

@@ -21,18 +21,14 @@ public:
     for (size_t i = 0; i < ThreadCount; ++i) {
       m_threads[i] = std::thread{&BulkConcurrentObserver::worker, this, i};
       m_stats[i] = Stats{names[i]};
+      m_stats[i].resetMetrics({"bulks", "commands"});
     }
   }
 
   ~BulkConcurrentObserver()
   {
-    stop();
-  }
-
-  void stop() final override
-  {
     m_stop = true;
-    m_ready.notify_one();
+    m_ready.notify_all();
 
     for (auto& t : m_threads)
       if (t.joinable())
@@ -43,12 +39,11 @@ public:
   {
     std::unique_lock<std::mutex> lock{m_queueMutex};
     m_queue.emplace(time, bulk);
-    m_ready.notify_one();
+    m_ready.notify_all();
   }
 
   auto stats() const
   {
-    std::lock_guard<std::mutex> lock{m_statsMutex};
     return m_stats;
   }
 
@@ -73,11 +68,8 @@ private:
 
       handle(time, bulk);
 
-      {
-        std::lock_guard<std::mutex> lock{m_statsMutex};
-        m_stats[statIndex].takeCountOf("bulks", 1);
-        m_stats[statIndex].takeCountOf("commands", bulk.size());
-      }
+      m_stats[statIndex].takeCountOf("bulks", 1);
+      m_stats[statIndex].takeCountOf("commands", bulk.size());
     }
   }
 
@@ -86,9 +78,7 @@ private:
   std::mutex m_queueMutex;
   std::atomic<bool> m_stop{false};
   std::condition_variable m_ready;
-
   std::array<Stats, ThreadCount> m_stats;
-  mutable std::mutex m_statsMutex;
 };
 
 } // hw10
