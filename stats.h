@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include <vector>
 
 namespace hw10 {
 
@@ -15,12 +16,11 @@ public:
   Stats(const Stats&) = default;
   Stats& operator=(const Stats&) = default;
 
+  void resetMetrics(const std::vector<std::string>& metrics);
   void takeCountOf(const std::string&, size_t count);
   std::string name() const;
 
-  auto begin();
   auto begin() const;
-  auto end();
   auto end() const;
 
 private:
