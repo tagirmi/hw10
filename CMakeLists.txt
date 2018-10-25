@@ -19,7 +19,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
   COMPILE_OPTIONS -Wpedantic -Wall -Wextra
 )
 
-target_link_libraries(${PROJECT_NAME} pthread)
+target_link_libraries(${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
 
 set(CPACK_GENERATOR DEB)
 
