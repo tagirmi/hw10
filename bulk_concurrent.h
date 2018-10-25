@@ -31,13 +31,12 @@ public:
     m_ready.notify_all();
 
     for (auto& t : m_threads)
-      if (t.joinable())
-        t.join();
+      t.join();
   }
 
   void update(const hw7::BulkTime& time, const hw7::Bulk& bulk) final override
   {
-    std::unique_lock<std::mutex> lock{m_queueMutex};
+    std::lock_guard<std::mutex> lock{m_queueMutex};
     m_queue.emplace(time, bulk);
     m_ready.notify_all();
   }
