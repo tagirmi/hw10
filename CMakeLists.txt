@@ -8,6 +8,8 @@ endif()
 
 project(bulkmt VERSION 0.0.${BUILD})
 
+find_package(Threads REQUIRED)
+
 add_executable(${PROJECT_NAME} main.cpp bulk_reader.cpp bulk_processor.cpp bulk_logger.cpp
   bulk_collector.cpp stats.cpp)
 
