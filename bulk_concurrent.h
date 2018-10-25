@@ -29,9 +29,10 @@ public:
     stop();
   }
 
-  void stop()
+  void stop() final override
   {
     m_stop = true;
+    m_ready.notify_one();
 
     for (auto& t : m_threads)
       if (t.joinable())
@@ -42,7 +43,7 @@ public:
   {
     std::unique_lock<std::mutex> lock{m_queueMutex};
     m_queue.emplace(time, bulk);
-    m_ready.notify_all();
+    m_ready.notify_one();
   }
 
   auto stats() const
@@ -62,12 +63,9 @@ private:
 
       {
         std::unique_lock<std::mutex> lock{m_queueMutex};
-
-        while (m_queue.empty() && !m_stop)
-          m_ready.wait(lock);
-//        m_ready.wait(lock, [this]() { return !m_queue.empty() && !m_stop; });
+        m_ready.wait(lock, [this]() { return !m_queue.empty() || m_stop; });
         if (m_stop)
-          break;
+          return;
 
         std::tie(time, bulk) = m_queue.front();
         m_queue.pop();

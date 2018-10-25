@@ -19,6 +19,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
   COMPILE_OPTIONS -Wpedantic -Wall -Wextra
 )
 
+target_link_libraries(${PROJECT_NAME} pthread)
+
 set(CPACK_GENERATOR DEB)
 
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
