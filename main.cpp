@@ -6,23 +6,29 @@
 
 namespace {
 
-size_t parseArg(int argc, char* argv[])
+size_t parseArg(int argc, char* argv[], size_t& parsed)
 {
+  if (argc < 2) {
+    std::cerr << "command line argument expected; usage: bulk N (N - bulk size)";
+    return false;
+  }
+
   try
   {
-    if (argc < 2)
-      throw std::logic_error("command line argument expected; usage: bulk N (N - bulk size)");
-
-    return std::stoul(argv[1]);
+    parsed = std::stoul(argv[1]);
   }
   catch(const std::invalid_argument&)
   {
-    throw std::logic_error("invalid argument passed to command line");
+    std::cerr << "invalid argument passed to command line";
+    return false;
   }
   catch(const std::out_of_range&)
   {
-    throw std::logic_error("didn't convert argument to number");
+    std::cerr << "didn't convert argument to number";
+    return false;
   }
+
+  return true;
 }
 
 }
@@ -31,7 +37,11 @@ int main(int argc, char* argv[])
 {
   try
   {
-    hw10::BulkReader reader{parseArg(argc, argv)};
+    size_t bulkSize;
+    if (!parseArg(argc, argv, bulkSize))
+      return EXIT_FAILURE;
+
+    hw10::BulkReader reader{bulkSize};
 
     auto processor = std::make_shared<hw10::BulkProcessor>();
     auto logger = std::make_shared<hw10::BulkLogger>();
