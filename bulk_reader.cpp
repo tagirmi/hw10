@@ -7,7 +7,6 @@
 
 hw10::BulkReader::BulkReader(size_t bulkSize)
   : m_observers{}
-  , m_lineCount{}
   , m_stats{"main"}
 {
   using namespace std::placeholders;
@@ -29,7 +28,7 @@ void hw10::BulkReader::read()
 {
   for (std::string cmd; std::getline(std::cin, cmd);) {
     m_bulkCollector->add(cmd);
-    ++m_lineCount;
+    m_stats.takeCountOf("lines", 1);
   }
 
   m_bulkCollector->endData();
@@ -37,12 +36,7 @@ void hw10::BulkReader::read()
   stop();
 }
 
-size_t hw10::BulkReader::lineCount() const
-{
-  return m_lineCount;
-}
-
-hw10::BulkStats hw10::BulkReader::stats() const
+hw10::Stats hw10::BulkReader::stats() const
 {
   return m_stats;
 }
@@ -55,7 +49,8 @@ void hw10::BulkReader::notify(const hw7::BulkTime& bulkTime, const hw7::Bulk& bu
       p->update(bulkTime, bulk);
   }
 
-  m_stats.takeCountOf(bulk);
+  m_stats.takeCountOf("bulks", 1);
+  m_stats.takeCountOf("commands", bulk.size());
 }
 
 void hw10::BulkReader::stop()

@@ -8,7 +8,7 @@
 #include <thread>
 
 #include "bulk.h"
-#include "bulk_stats.h"
+#include "stats.h"
 
 namespace hw10 {
 
@@ -20,7 +20,7 @@ public:
   {
     for (size_t i = 0; i < ThreadCount; ++i) {
       m_threads[i] = std::thread{&BulkConcurrentObserver::worker, this, i};
-      m_stats[i] = BulkStats{names[i]};
+      m_stats[i] = Stats{names[i]};
     }
   }
 
@@ -75,7 +75,8 @@ private:
 
       {
         std::lock_guard<std::mutex> lock{m_statsMutex};
-        m_stats[statIndex].takeCountOf(bulk);
+        m_stats[statIndex].takeCountOf("bulks", 1);
+        m_stats[statIndex].takeCountOf("commands", bulk.size());
       }
     }
   }
@@ -86,7 +87,7 @@ private:
   std::atomic<bool> m_stop{false};
   std::condition_variable m_ready;
 
-  std::array<BulkStats, ThreadCount> m_stats;
+  std::array<Stats, ThreadCount> m_stats;
   mutable std::mutex m_statsMutex;
 };
 
