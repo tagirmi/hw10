@@ -1,5 +1,6 @@
 #include <fstream>
 #include <sstream>
+#include <atomic>
 
 #include "bulk_logger.h"
 
@@ -7,8 +8,10 @@ namespace {
 
 std::string getBulkLogName(const hw7::BulkTime& time)
 {
+  static std::atomic<int> id{0};
+
   std::stringstream ss;
-  ss << "bulk" << time.time_since_epoch().count() << "_" << std::this_thread::get_id() << ".log";
+  ss << "bulk" << time.time_since_epoch().count() << "_" << std::atomic_fetch_add(&id, 1) << ".log";
   return ss.str();
 }
 
