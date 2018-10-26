@@ -51,14 +51,14 @@ private:
 
   void worker(int statIndex)
   {
-    while(!m_stop) {
+    while (true) {
       hw7::BulkTime time;
       hw7::Bulk bulk;
 
       {
         std::unique_lock<std::mutex> lock{m_queueMutex};
         m_ready.wait(lock, [this]() { return !m_queue.empty() || m_stop; });
-        if (m_stop)
+        if (m_stop && m_queue.empty())
           return;
 
         std::tie(time, bulk) = m_queue.front();
