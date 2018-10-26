@@ -25,7 +25,7 @@ public:
   ~BulkReader();
 
   void subscribe(const std::shared_ptr<hw7::BulkObserver>&);
-  void read();
+  void read(std::istream&);
 
   Stats stats() const;
 

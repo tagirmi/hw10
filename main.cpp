@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
     reader.subscribe(processor);
     reader.subscribe(logger);
 
-    reader.read();
+    reader.read(std::cin);
 
     std::cout << reader.stats();
     for (const auto& s : processor->stats())
