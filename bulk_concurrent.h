@@ -27,11 +27,17 @@ public:
 
   ~BulkConcurrentObserver()
   {
+    stop();
+  }
+
+  void stop() final override
+  {
     m_stop = true;
     m_ready.notify_all();
 
     for (auto& t : m_threads)
-      t.join();
+      if (t.joinable())
+        t.join();
   }
 
   void update(const hw7::BulkTime& time, const hw7::Bulk& bulk) final override

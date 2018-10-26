@@ -33,6 +33,7 @@ void hw10::BulkReader::read(std::istream& is)
   }
 
   m_bulkCollector->endData();
+  stop();
 }
 
 hw10::Stats hw10::BulkReader::stats() const
@@ -50,4 +51,13 @@ void hw10::BulkReader::notify(const hw7::BulkTime& bulkTime, const hw7::Bulk& bu
 
   m_stats.takeCountOf("bulks", 1);
   m_stats.takeCountOf("commands", bulk.size());
+}
+
+void hw10::BulkReader::stop()
+{
+  for (auto& i : m_observers) {
+    auto p = i.lock();
+    if (p)
+      p->stop();
+  }
 }

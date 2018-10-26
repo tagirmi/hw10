@@ -13,6 +13,7 @@ using BulkTime = std::chrono::time_point<std::chrono::system_clock, std::chrono:
 struct BulkObserver
 {
   virtual void update(const BulkTime&, const Bulk&) = 0;
+  virtual void stop() = 0;
   virtual ~BulkObserver() = default;
 };
 
