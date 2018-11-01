@@ -42,8 +42,10 @@ public:
 
   void update(const hw7::BulkTime& time, const hw7::Bulk& bulk) final override
   {
-    std::lock_guard<std::mutex> lock{m_queueMutex};
-    m_queue.emplace(time, bulk);
+    {
+      std::lock_guard<std::mutex> lock{m_queueMutex};
+      m_queue.emplace(time, bulk);
+    }
     m_ready.notify_all();
   }
 

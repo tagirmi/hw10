@@ -2,7 +2,7 @@
 
 #include <string>
 #include <iostream>
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 namespace hw10 {
@@ -25,7 +25,7 @@ public:
 
 private:
   std::string m_name;
-  std::map<std::string, size_t> m_metrics;
+  std::unordered_map<std::string, size_t> m_metrics;
 };
 
 } // hw10
